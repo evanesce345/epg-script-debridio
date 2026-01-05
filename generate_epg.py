@@ -73,8 +73,9 @@ def main():
     )
     parser.add_argument(
         "--source-url",
+        nargs="+",
         required=True,
-        help="epgshare XMLTV URL, e.g. https://epgshare01.online/epgshare01/epg_ripper_US2.xml.gz",
+        help="epgshare XMLTV URL(s), e.g. https://epgshare01.online/epgshare01/epg_ripper_US2.xml.gz",
     )
     parser.add_argument(
         "--mapping",
@@ -99,26 +100,51 @@ def main():
         )
         sys.exit(1)
 
+    # master root to append all source url info to
+    master_root = ET.Element("tv")
+
+    for source in args.source_url:
+        try:
+            xml_bytes = download_and_decompress(source)
+        except Exception as e:
+            print(
+                f"ERROR: Failed to download/decompress XML from {source}: {e}",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
+        try:
+            out_bytes = transform_xml(xml_bytes, mapping)
+        except Exception as e:
+            print(f"ERROR: Failed to transform XML: {e}", file=sys.stderr)
+            sys.exit(1)
+
+        try:
+            root = ET.fromstring(out_bytes)
+        except Exception as e:
+            print(
+                f"ERROR: Failed to parse transformed XML from {source}: {e}",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
+        # Append all channels and programmes to master root
+        for ch in root.findall("channel"):
+            master_root.append(ch)
+
+        for prog in root.findall("programme"):
+            master_root.append(prog)
+
+    # Serialize master_root to bytes before writing
     try:
-        xml_bytes = download_and_decompress(args.source_url)
+        tree = ET.ElementTree(master_root)
+        buf = io.BytesIO()
+        tree.write(buf, encoding="utf-8", xml_declaration=True)
+        output_path.write_bytes(buf.getvalue())
     except Exception as e:
         print(
-            f"ERROR: Failed to download/decompress XML from {args.source_url}: {e}",
+            f"ERROR: Failed to write output XML to {output_path}: {e}",
             file=sys.stderr,
-        )
-        sys.exit(1)
-
-    try:
-        out_bytes = transform_xml(xml_bytes, mapping)
-    except Exception as e:
-        print(f"ERROR: Failed to transform XML: {e}", file=sys.stderr)
-        sys.exit(1)
-
-    try:
-        output_path.write_bytes(out_bytes)
-    except Exception as e:
-        print(
-            f"ERROR: Failed to write output XML to {output_path}: {e}", file=sys.stderr
         )
         sys.exit(1)
 
