@@ -23,12 +23,13 @@ Some channels across regions have the same tvg-id. This means some of the networ
 - FX
 - MTV
 - TNT
+- (TBD)
 
 ## Self-hosting
 
 If you want to self-host the guide and customize the countries you would like to add, simply edit the `mapping.json` file to your liking or create another. You may run the command below for all the countries featured in the debridio TV addon, or specify any link to an xml (provided you create your own matchings).
 
-Remember guides are usually updated daily so you will have to schedule the script to run yourself, such as with crontab.
+Remember guides are usually updated daily so you will have to schedule the script to run yourself, such as with cron.
 
 ```
 python -m generate_epg \
@@ -36,3 +37,7 @@ python -m generate_epg \
 --mapping mapping.json \
 --output guide.xml
 ```
+
+## Docker
+
+A Dockerfile and cron is included for scheduling a container to run the script every day at 06:00 EST. If you would like to change this please edit the `crontab` file and change the `TZ` env in the dockerfile.

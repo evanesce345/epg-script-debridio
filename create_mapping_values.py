@@ -1,3 +1,8 @@
+"""
+This file generates values for mapping based on an m3u8 playlist in the directory.
+Use this as the foundation of a mapping.json file.
+"""
+
 import json
 from pathlib import Path
 import re

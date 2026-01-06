@@ -1,3 +1,7 @@
+"""
+This is the main file that generates the epg based on supplied sources and mapping json.
+"""
+
 import argparse
 import gzip
 import io
@@ -5,6 +9,7 @@ import json
 import sys
 from pathlib import Path
 from typing import Dict
+import logging
 
 import requests
 import xml.etree.ElementTree as ET
@@ -68,6 +73,14 @@ def transform_xml(xml_bytes: bytes, mapping: Dict[str, str]) -> bytes:
 
 
 def main():
+    logging.basicConfig(
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        level=logging.INFO,
+        datefmt="[%H:%M:%S]",
+    )
+
+    logging.info("EPG generation started...")
+
     parser = argparse.ArgumentParser(
         description="Download epgshare XMLTV, remap IDs, and output custom XML."
     )
@@ -95,37 +108,32 @@ def main():
     try:
         mapping = load_mapping(mapping_path)
     except Exception as e:
-        print(
-            f"ERROR: Failed to load mapping from {mapping_path}: {e}", file=sys.stderr
-        )
+        logging.error(f"Failed to load mapping from {mapping_path}: {e}")
         sys.exit(1)
 
     # master root to append all source url info to
     master_root = ET.Element("tv")
 
     for source in args.source_url:
+        logging.info(
+            f"Transforming from source #{args.source_url.index(source) + 1} of {len(args.source_url)} - {source}"
+        )
         try:
             xml_bytes = download_and_decompress(source)
         except Exception as e:
-            print(
-                f"ERROR: Failed to download/decompress XML from {source}: {e}",
-                file=sys.stderr,
-            )
+            logging.error(f"Failed to download/decompress XML from {source}: {e}")
             sys.exit(1)
 
         try:
             out_bytes = transform_xml(xml_bytes, mapping)
         except Exception as e:
-            print(f"ERROR: Failed to transform XML: {e}", file=sys.stderr)
+            logging.error(f"ERROR: Failed to transform XML: {e}")
             sys.exit(1)
 
         try:
             root = ET.fromstring(out_bytes)
         except Exception as e:
-            print(
-                f"ERROR: Failed to parse transformed XML from {source}: {e}",
-                file=sys.stderr,
-            )
+            logging.error(f"Failed to parse transformed XML from {source}: {e}")
             sys.exit(1)
 
         # Append all channels and programmes to master root
@@ -142,13 +150,10 @@ def main():
         tree.write(buf, encoding="utf-8", xml_declaration=True)
         output_path.write_bytes(buf.getvalue())
     except Exception as e:
-        print(
-            f"ERROR: Failed to write output XML to {output_path}: {e}",
-            file=sys.stderr,
-        )
+        logging.error(f"Failed to write output XML to {output_path}: {e}")
         sys.exit(1)
 
-    print(f"EPG updated: {output_path}")
+    logging.info(f"EPG updated: {output_path}")
 
 
 if __name__ == "__main__":
