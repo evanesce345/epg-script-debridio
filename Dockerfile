@@ -14,4 +14,6 @@ RUN pip install -r requirements.txt
 
 RUN crontab -u root crontab
 
+RUN chmod +x /app/entrypoint.sh
+
 ENTRYPOINT [ "/app/entrypoint.sh" ]
