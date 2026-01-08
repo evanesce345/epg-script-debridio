@@ -1,4 +1,5 @@
 {
+  "__comment": "--- AU ---",
   "FoxSportsUltraHD.au": "foxsports501",
   "1": "foxsports502",
   "FoxSports503.au": "foxsports503",
@@ -15,6 +16,7 @@
   "ABCKidsMelbourne.au": "abckids",
   "ABCNewsMelbourne.au": "abcnews",
 
+  "__comment": "--- BR ---",
   "Combate.br": "combate",
   "ESPN.br": "espn",
   "ESPN.2.br": "espn2",
@@ -33,6 +35,7 @@
   "São.Paulo/SP..Canal.Legislativo.br": "canal gov",
   "São.Paulo/SP..CNN.Brasil.HD.br": "ccnbrasil",
 
+  "__comment": "--- CA ---",
   "Cable.Pulse.24.(CP24).HD.ca2": "cp24",
   "CBC.News.Network.HD.ca2": "cbcnewsnetwork",
   "34": "canalsavoir",
@@ -51,6 +54,7 @@
   "Sportsnet.One.ca2": "sportsnetone",
   "Sportsnet.360.HD.ca2": "sportsnet360",
 
+  "__comment": "--- CL ---",
   "Canal.13.de.Chile.cl": "t13",
   "50": "13teleseries",
   "51": "13viajes",
@@ -81,6 +85,7 @@
   "76": "tvchile",
   "77": "tntsport",
 
+  "__comment": "--- ES ---",
   "Canal.24.h.es": "24h",
   "79": "animevision",
   "Clan.es": "clan",
@@ -109,12 +114,14 @@
   "DAZN.LALIGA.es": "daznlaliga",
   "DAZN.LALIGA.2.es": "daznlaliga2",
 
+  "__comment": "--- EVENTS ---",
   "105": "ppv",
   "106": "nhlliveevents",
   "107": "nflliveevents",
   "108": "nbaliveevents",
   "109": "mlbliveevents",
 
+  "__comment": "--- FR ---",
   "TF1.fr": "tf1",
   "France.24.fr": "france24",
   "France.2.fr": "france2",
@@ -135,6 +142,7 @@
   "RMC.Sport.1.fr": "rmcsportone",
   "RMC.Sport.Live.2.fr": "rmcsporttwo",
 
+  "__comment": "--- IT ---",
   "Rai1.it": "rai1",
   "Rai2.it": "rai2",
   "Rai3.it": "rai3",
@@ -173,6 +181,7 @@
   "Sky.Sport.Tennis.it": "skysporttennis",
   "Sky.Sport.Uno.it": "skysportuno",
 
+  "__comment": "--- IN ---",
   "Sun.TV.HD.in": "suntv",
   "Star.Vijay.HD.in": "starvijay",
   "Zee.Thirai.in": "zeethirai",
@@ -193,6 +202,7 @@
   "Colors.Infinity.in": "colorinfinity",
   "Nick.HD+.in": "nickhdplus",
 
+  "__comment": "--- MX ---",
   "FOX.SPORTS.PREMIUM.mx": "foxdeportes",
   "FOX.SPORTS.mx": "foxsports",
   "FOX.SPORTS.2.mx": "foxsports2",
@@ -225,6 +235,7 @@
   "Canal.Universal.TV.(México).mx": "universalchannel",
   "Canal.Warner.TV.(México).mx": "warnerbrostv",
 
+  "__comment": "--- NZ ---",
   "TVNZ.1.nz": "tvnz1",
   "TVNZ.2.nz": "tvnz2",
   "Three.nz": "three",
@@ -240,6 +251,7 @@
   "Sky.Open.nz": "skyopen",
   "Sky.Open+1.nz": "skyopenplus1",
 
+  "__comment": "--- UK ---",
   "SkySpMainEvHD.uk": "skysportsmainevent",
   "SkySp.F1.HD.uk": "skysportsf1",
   "SkySp.PL.HD.uk": "skysportspremierleague",
@@ -280,6 +292,7 @@
   "Premier.Sports.2.HD.uk": "premiersport2",
   "U.and.GOLD.HD.uk": "uandgold",
 
+  "__comment": "--- USA LOCALS ---",
   "KTVODT3.us_locals1": "abc3ktvokirksville",
   "KYOU-DT2.us_locals1": "cbs3ktvokirksville",
   "Comet.us_locals1": "cometktvokirksville",
@@ -454,6 +467,7 @@
   "WSOC-DT.us_locals1": "wsoctvcharlotte",
   "WCNC-DT.us_locals1": "wcnccharlotte",
 
+  "__comment": "--- USA ---",
   "A.and.E.HD.East.us2": "ae",
   "ABC.National.Feed.us2": "abc",
   "ABC.News.Live.us2": "abcnews",
@@ -662,6 +676,7 @@
   "American.Crimes.us2": "americancrimes",
   "637": "peacockpremierleague",
 
+  "__comment": "--- ZA ---",
   "638": "boktv",
   "639": "ln24sa",
   "SABC.News.za": "sabcnews",
