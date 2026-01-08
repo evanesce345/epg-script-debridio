@@ -58,7 +58,7 @@ A Dockerfile and cron is included for scheduling a container to run the script e
 
 An example docker compose for users who don't want to clone the repo.
 
-```docker
+```yaml
 services:
   epg-generator:
     build:
