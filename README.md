@@ -71,19 +71,47 @@ services:
 
   epg-server:
     image: nginx:alpine
+    # for localhost
+    # ports:
+    #  - 1776:1776
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
       - epg_data:/usr/share/nginx/html:ro
-    # If using traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.epg.rule=Host(`${INSERT_HOST_NAME_HERE}`)"
-      - "traefik.http.routers.epg.entrypoints=websecure"
-      - "traefik.http.routers.epg.tls.certresolver=letsencrypt"
-      - "traefik.http.services.epg.loadbalancer.server.port=1776"
+    # for traefik
+    # labels:
+    #  - "traefik.enable=true"
+    #  - "traefik.http.routers.epg.rule=Host(`${INSERT_HOST_NAME_HERE}`)"
+    #  - "traefik.http.routers.epg.entrypoints=websecure"
+    #  - "traefik.http.routers.epg.tls.certresolver=letsencrypt"
+    # - "traefik.http.services.epg.loadbalancer.server.port=1776"
     container_name: epg-server
     restart: unless-stopped
 
 volumes:
   epg_data:
+```
+
+### Nginx Config
+
+An example Nginx Config for use with the aforementioned compose file.
+
+```nginx
+server {
+    listen 1776;
+    root /usr/share/nginx/html;
+    index index.html index.htm;
+
+    location / {
+        autoindex on;
+        autoindex_exact_size off;
+        autoindex_localtime on;
+        try_files $uri $uri/ =404;
+        add_header Access-Control-Allow-Origin "*";
+    }
+
+    location ~* \.xml$ {
+        add_header Content-Type "application/xml";
+        add_header Cache-Control "public, max-age=300";
+    }
+}
 ```
