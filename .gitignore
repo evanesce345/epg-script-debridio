@@ -208,3 +208,5 @@ __marimo__/
 
 guide.xml
 mapping_flipped.json
+.conf
+compose.yaml
