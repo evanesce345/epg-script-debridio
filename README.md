@@ -50,9 +50,8 @@ services:
 
   epg-server:
     image: nginx:alpine
-    # for localhost
-    # ports:
-    #  - 1776:1776
+    ports:
+      - 1776:1776
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
       - epg_data:/usr/share/nginx/html:ro
