@@ -2,32 +2,11 @@
 
 A python script for the https://debridio.com/ live tv addon that generates an EPG xml file
 
-Access the EPG XMl file here: https://epg.100519.xyz/guide.xml
-
-## Discrepancies
-
-Some channels across regions have the same tvg-id. This means some of the networks across countries will all erroneously share the same guide. This cannot be fixed unless the developer updates the addon to create unique ids, or you edit your own m3u8 playlist file. A list of the discrepant channels is below.
-
-### List of discrepant channels
-
-- ABC
-- Cartoon Network
-- Disney Channel
-- Nickelodeon
-- History
-- beIN Sports
-- bravo
-- ESPN
-- ESPN2
-- Fox Sports
-- FX
-- MTV
-- TNT
-- (TBD)
+Access the EPG XML file here: https://epg.100519.xyz/guide.xml.gz
 
 ## Self-hosting
 
-If you want to self-host the guide and customize the countries you would like to add, simply edit the `mapping.json` file to your liking or create another. You may run the command below for all the countries featured in the debridio TV addon, or specify any link to an xml (provided you create your own matchings).
+By default every country in the addon is included. If you only need a subset, you can self-host and run the command below excluding any country you do not want. This may improve loading times for the EPG in IPTV apps.
 
 ```py
 python -m generate_epg \
@@ -44,7 +23,7 @@ python -m generate_epg \
              "https://epgshare01.online/epgshare01/epg_ripper_UK1.xml.gz" \
              "https://epgshare01.online/epgshare01/epg_ripper_US_LOCALS1.xml.gz" \
              "https://epgshare01.online/epgshare01/epg_ripper_US2.xml.gz" \
---mapping mapping.json \
+--ids ids.txt \
 --output guide.xml
 ```
 

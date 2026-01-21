@@ -14,9 +14,7 @@ cd /app && /usr/local/bin/python3 -u -m generate_epg \
                "https://epgshare01.online/epgshare01/epg_ripper_NZ1.xml.gz" \
                "https://epgshare01.online/epgshare01/epg_ripper_UK1.xml.gz" \
                "https://epgshare01.online/epgshare01/epg_ripper_US_LOCALS1.xml.gz" \
-               "https://epgshare01.online/epgshare01/epg_ripper_US2.xml.gz" \
-  --mapping mapping.json \
-  --output guide.xml
+               "https://epgshare01.online/epgshare01/epg_ripper_US2.xml.gz"
 
 
 exec cron -f

@@ -1,5 +1,5 @@
 """
-This is the main file that generates the epg based on supplied sources and mapping json.
+This is the main file that generates the epg based on supplied sources and ids text file.
 """
 
 import argparse
@@ -15,9 +15,10 @@ import requests
 import xml.etree.ElementTree as ET
 
 
-def load_mapping(path: Path) -> Dict[str, str]:
+def load_ids(path: Path) -> list[str]:
     with path.open("r", encoding="utf-8") as f:
-        return json.load(f)
+        a = [line.strip() for line in f]
+        return a
 
 
 def download_and_decompress(url: str) -> bytes:
@@ -33,26 +34,26 @@ def download_and_decompress(url: str) -> bytes:
         return data
 
 
-def transform_xml(xml_bytes: bytes, mapping: Dict[str, str]) -> bytes:
+def transform_xml(xml_bytes: bytes, ids: list[str]) -> bytes:
     # parse XML
     parser = ET.XMLParser(target=ET.TreeBuilder())
     root = ET.fromstring(xml_bytes, parser=parser)
     tree = ET.ElementTree(root)
 
-    # 1) rewrite chanel associated id
-    for ch in root.findall("channel"):
-        cid = ch.get("id")
-        if cid in mapping:
-            ch.set("id", mapping[cid])
+    # # 1) rewrite chanel associated id
+    # for ch in root.findall("channel"):
+    #     cid = ch.get("id")
+    #     if cid in ids:
+    #         ch.set("id", cid)
 
-    # 2) rewrite programme associated channels
-    for prog in root.findall("programme"):
-        cid = prog.get("channel")
-        if cid in mapping:
-            prog.set("channel", mapping[cid])
+    # # 2) rewrite programme associated channels
+    # for prog in root.findall("programme"):
+    #     cid = prog.get("channel")
+    #     if cid in ids:
+    #         prog.set("channel", cid)
 
     # keep only channels/programmes that were mapped
-    mapped_ids = set(mapping.values())
+    mapped_ids = set(ids)
     if mapped_ids:
         # remove channels not in mapped_ids
         for ch in list(root.findall("channel")):
@@ -82,33 +83,33 @@ def main():
     logging.info("EPG generation started...")
 
     parser = argparse.ArgumentParser(
-        description="Download epgshare XMLTV, remap IDs, and output custom XML."
+        description="Download XMLTV, map IDs, and output custom XML."
     )
     parser.add_argument(
         "--source-url",
         nargs="+",
         required=True,
-        help="epgshare XMLTV URL(s), e.g. https://epgshare01.online/epgshare01/epg_ripper_US2.xml.gz",
+        help="XMLTV URL(s), e.g. https://epgshare01.online/epgshare01/epg_ripper_US2.xml.gz",
     )
     parser.add_argument(
-        "--mapping",
-        default="mapping.json",
-        help="Path to JSON file with {source_id: target_id} mapping.",
+        "--ids",
+        default="ids.txt",
+        help="Path to txt file with ids.",
     )
     parser.add_argument(
         "--output",
-        default="custom_epg.xml",
+        default="guide.xml",
         help="Output XMLTV file path (e.g. web root file).",
     )
     args = parser.parse_args()
 
-    mapping_path = Path(args.mapping)
+    ids_path = Path(args.ids)
     output_path = Path(args.output)
 
     try:
-        mapping = load_mapping(mapping_path)
+        ids = load_ids(ids_path)
     except Exception as e:
-        logging.error(f"Failed to load mapping from {mapping_path}: {e}")
+        logging.error(f"Failed to load ids from {ids_path}: {e}")
         sys.exit(1)
 
     # master root to append all source url info to
@@ -125,7 +126,7 @@ def main():
             sys.exit(1)
 
         try:
-            out_bytes = transform_xml(xml_bytes, mapping)
+            out_bytes = transform_xml(xml_bytes, ids)
         except Exception as e:
             logging.error(f"ERROR: Failed to transform XML: {e}")
             sys.exit(1)
@@ -146,14 +147,15 @@ def main():
     # Serialize master_root to bytes before writing
     try:
         tree = ET.ElementTree(master_root)
-        buf = io.BytesIO()
-        tree.write(buf, encoding="utf-8", xml_declaration=True)
-        output_path.write_bytes(buf.getvalue())
+
+        with gzip.open(str(output_path) + ".gz", "wb") as f:
+            tree.write(f, encoding="utf-8", xml_declaration=True)
+
     except Exception as e:
         logging.error(f"Failed to write output XML to {output_path}: {e}")
         sys.exit(1)
 
-    logging.info(f"EPG updated: {output_path}")
+    logging.info(f"EPG updated: {output_path}.gz")
 
 
 if __name__ == "__main__":

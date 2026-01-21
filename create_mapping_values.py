@@ -1,6 +1,5 @@
 """
-This file generates values for mapping based on an m3u8 playlist in the directory.
-Use this as the foundation of a mapping.json file.
+This file generates a text file of all tvg-ids from a playlist. Used as the basis for generate_epg.py
 """
 
 import json
@@ -9,25 +8,24 @@ import re
 
 
 def parse_m3u(m3u_path: Path):
-    """Extract tvg-id and tvg-name from M3U."""
-    channels = {}
+    """Extract tvg-id from M3U."""
+    channels = []
     with m3u_path.open("r", encoding="utf-8") as f:
         content = f.read()
 
     # Find #EXTINF lines
-    for match in re.finditer(
-        r'#EXTINF:.*?tvg-id="([^"]+)"[^,]*,(.*?)(?=\nhttp|$)', content, re.DOTALL
-    ):
-        tvg_id, name = match.groups()
-        channels[tvg_id] = name.strip()
+    for match in re.finditer(r'#EXTINF:.*?tvg-id="([^"]+)"', content, re.DOTALL):
+        channels.append(match.groups()[0])
 
     return channels
 
 
 def main():
     channels = parse_m3u(Path("playlist.m3u8"))
-    mapping = {str(i): v for i, v in enumerate(channels.keys())}
-    json.dump(mapping, open("mappings.json", "w"), indent=2)
+
+    with open("ids.txt", "w") as f:
+        for channel in channels:
+            f.write(channel + "\n")
 
 
 if __name__ == "__main__":
