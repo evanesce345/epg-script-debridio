@@ -44,17 +44,19 @@ services:
       context: https://github.com/evanesce345/epg-script-debridio.git
       dockerfile: Dockerfile
     volumes:
-      - epg_data:/app
+      - epg_data:/app/epg
     container_name: epg-generator
     restart: unless-stopped
 
   epg-server:
     image: nginx:alpine
+    # for localhost
     ports:
       - 1776:1776
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      - epg_data:/usr/share/nginx/html:ro
+      - .conf:/etc/nginx/conf.d/default.conf:ro
+      - epg_data:/usr/share/nginx/html
+    command: sh -c "rm -f /usr/share/nginx/html/index.html && rm -f /usr/share/nginx/html/50x.html && nginx -g 'daemon off;'"
     # for traefik
     # labels:
     #  - "traefik.enable=true"

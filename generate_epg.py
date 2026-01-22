@@ -98,7 +98,7 @@ def main():
     )
     parser.add_argument(
         "--output",
-        default="guide.xml",
+        default="/app/epg/guide.xml",
         help="Output XMLTV file path (e.g. web root file).",
     )
     args = parser.parse_args()

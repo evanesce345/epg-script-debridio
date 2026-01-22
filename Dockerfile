@@ -1,4 +1,4 @@
-FROM python:3.12-slim as builder
+FROM python:3.12-slim AS builder
 
 COPY requirements.txt .
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -8,6 +8,8 @@ RUN pip install --no-cache-dir --user -r requirements.txt
 FROM python:3.12-slim
 
 WORKDIR /app
+
+RUN mkdir -p /app/epg
 
 ENV TZ=America/New_York
 ENV PATH=/root/.local/bin:$PATH
