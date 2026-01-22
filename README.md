@@ -79,7 +79,9 @@ An example Nginx Config for use with the aforementioned compose file.
 server {
     listen 1776;
     root /usr/share/nginx/html;
-    index index.html index.htm;
+
+    gzip off;
+    gunzip off;
 
     location / {
         autoindex on;
@@ -89,9 +91,12 @@ server {
         add_header Access-Control-Allow-Origin "*";
     }
 
-    location ~* \.xml$ {
-        add_header Content-Type "application/xml";
+    location ~* \.xml\.gz$ {
+        default_type application/octet-stream;
+        add_header Content-Disposition "attachment; filename=guide.xml.gz";
         add_header Cache-Control "public, max-age=300";
+        expires 23h;
+        etag on;
     }
 }
 ```
