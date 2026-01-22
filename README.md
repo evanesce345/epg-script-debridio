@@ -50,7 +50,6 @@ services:
 
   epg-server:
     image: nginx:alpine
-    # for localhost
     ports:
       - 1776:1776
     volumes:
